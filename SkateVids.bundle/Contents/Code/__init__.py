@@ -104,7 +104,7 @@ def SourceMenu(sender, source_list=[]):
 #####################################################################################################
 
 def VidMenu(sender, vids=[], include_source_name_in_summary=False):
-    dir = ObjectContainer(title2=L('Episodes'))
+    dir = ObjectContainer(title2=L('Videos'))
     
     #add video items to menu
     for vid in vids:
