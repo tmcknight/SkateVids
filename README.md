@@ -1,5 +1,13 @@
-#SkateVids
+# SkateVids
 
-SkateVids is a skateboard video channel for [PlexApp](http://plexapp.com).
+## Overview
 
-Various YouTube/Vimeo feeds are used as the source of the videos that this channel displays. They can be modified in [sources.json](https://github.com/tmcknight/SkateVids/blob/master/SkateVids.bundle/Contents/Resources/sources.json).
+SkateVids is a skateboard video channel for [Plex](http://plexapp.com). This channel retrieves videos from various YouTube/Vimeo feeds. You can view/modify which feeds are used in [sources.json](https://github.com/tmcknight/SkateVids/blob/master/SkateVids.bundle/Contents/Resources/sources.json).
+
+## Installation
+
+I'm hoping to get this into the official Plex app store, but for now you can install it manually.
+
+1. Download the latest package.
+2. Unzip.
+3. Place SkateVids.bundle in ~/Library/Application Support/Plex Media Server/Plug-ins.
