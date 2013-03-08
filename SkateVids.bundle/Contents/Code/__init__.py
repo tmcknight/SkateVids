@@ -4,7 +4,7 @@ import re
 
 ####################################################################################################
 
-PLUGIN_PREFIX = "/video/skateboardtv"
+PLUGIN_PREFIX = "/video/skatevids"
 
 VIMEO_URL         = 'http://www.vimeo.com/%s'
 YOUTUBE_URL = 'http://www.youtube.com/watch?v=%s'
