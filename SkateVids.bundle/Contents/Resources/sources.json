@@ -1,0 +1,102 @@
+{
+	"mainmenu": [
+		{
+			"title": "Thrasher Magazine",
+			"icon": "icon-thrasher.png",
+			"feeds": [
+				{
+					"type": "youtube",
+					"url": "http://gdata.youtube.com/feeds/api/users/ThrasherMagazine/uploads?v=2&alt=json"
+				}
+			]
+		},
+		{
+			"title": "SLAP Magazine",
+			"icon": "icon-slap.png",
+			"feeds": [
+				{
+					"type": "youtube",
+					"url": "http://gdata.youtube.com/feeds/api/users/SLAPskateboardmag/uploads?v=2&alt=json"
+				}
+			]
+		},
+		{
+			"title": "Crailtap",
+			"icon": "icon-crailtap.png",
+			"feeds": [
+				{
+					"type": "youtube",
+					"url": "http://gdata.youtube.com/feeds/api/users/Crailtap/uploads?v=2&alt=json"
+				}
+			]
+		},
+		{
+			"title": "Volcom",
+			"icon": "icon-volcom.png",
+			"feeds": [
+				{
+					"type": "youtube",
+					"url": "http://gdata.youtube.com/feeds/api/users/VolcomStoneYAE/uploads?v=2&alt=json"
+				}
+			]
+		},
+        {
+            "title": "Emerica",
+            "icon": "icon-emerica.png",
+            "feeds": [
+                {
+                    "type": "youtube",
+                    "url": "http://gdata.youtube.com/feeds/api/users/emerica/uploads?v=2&alt=json"
+                },
+                {
+                    "type": "youtube",
+                    "url": "http://gdata.youtube.com/feeds/api/users/EmericaEurope/uploads?v=2&alt=json"
+                },
+                {
+                    "type": "youtube",
+                    "url": "http://gdata.youtube.com/feeds/api/users/EmericaCanada/uploads?v=2&alt=json"
+                }
+            ]
+        },
+		{
+			"title": "Blue Tile Lounge",
+			"icon": "icon-btl.png",
+			"feeds": [
+				{
+					"type": "vimeo",
+					"url": "http://vimeo.com/api/v2/bluetilelounge/videos.json"
+				}
+			]
+		},
+        {
+            "title": "Skateboarder Magazine",
+            "icon": "icon-skateboarder.png",
+            "feeds": [
+                {
+                    "type": "vimeo",
+                    "url": "http://vimeo.com/api/v2/skateboardermag/videos.json"
+                }
+            ]
+        },
+        {
+            "title": "Flip Skateboards",
+            "icon": "icon-flip.png",
+            "feeds": [
+                {
+                    "type": "vimeo",
+                    "url": "http://vimeo.com/api/v2/user6118538/videos.json"
+                }
+            ]
+        },
+        {
+            "title": "Black Label Skateboards",
+            "icon": "icon-blacklabel.png",
+            "feeds": [
+                {
+                    "type": "vimeo",
+                    "url": "http://vimeo.com/api/v2/blacklabel/videos.json"
+                }
+            ]
+        }
+	]
+}
