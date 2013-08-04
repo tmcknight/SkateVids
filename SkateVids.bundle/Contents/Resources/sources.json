@@ -97,6 +97,46 @@
                     "url": "http://vimeo.com/api/v2/blacklabel/videos.json"
                 }
             ]
+        },
+        {
+            "title": "Independent Trucks",
+            "icon": "icon-default.png",
+            "feeds": [
+                {
+                    "type": "youtube",
+                    "url": "http://gdata.youtube.com/feeds/api/users/IndependentTrucks/uploads?v=2&alt=json"
+                }
+            ]
+        },
+        {
+            "title": "Alien Workshop",
+            "icon": "icon-default.png",
+            "feeds": [
+                {
+                    "type": "youtube",
+                    "url": "http://gdata.youtube.com/feeds/api/users/AlienWorkShop/uploads?v=2&alt=json"
+                }
+            ]
+        },
+        {
+            "title": "Adidas Footwear",
+            "icon": "icon-default.png",
+            "feeds": [
+                {
+                    "type": "youtube",
+                    "url": "http://gdata.youtube.com/feeds/api/users/adidasSkateboarding/uploads?v=2&alt=json"
+                }
+            ]
+        },
+        {
+            "title": "Lakai Footwear",
+            "icon": "icon-default.png",
+            "feeds": [
+                {
+                    "type": "youtube",
+                    "url": "http://gdata.youtube.com/feeds/api/users/lakaiweb/uploads?v=2&alt=json"
+                }
+            ]
         }
 	]
 }
