@@ -6,12 +6,12 @@ import re
 
 PLUGIN_PREFIX = "/video/skatevids"
 
-VIMEO_URL         = 'http://www.vimeo.com/%s'
+VIMEO_URL = 'http://www.vimeo.com/%s'
 YOUTUBE_URL = 'http://www.youtube.com/watch?v=%s'
 YOUTUBE_VIDEO_FORMATS = ['Standard', 'Medium', 'High', '720p', '1080p']
 YOUTUBE_FMT = [34, 18, 35, 22, 37]
 
-NAME          = L('Title')
+NAME = L('Title')
 
 #Sources
 CHANNELS_FILE = 'sources.json'
@@ -21,42 +21,116 @@ YOUTUBE = 'youtube'
 VIMEO = 'vimeo'
 
 #Artwork
-ART           = 'art-default.jpg'
-ICON          = 'icon-default.png'
+ART = 'art-default.jpg'
+ICON = 'icon-default.png'
 PLUGIN_ICON_NEXT = 'icon-next.png'
-PREFS_ICON    = 'icon-prefs.png'
+PREFS_ICON = 'icon-prefs.png'
 ICON_RECENT = 'icon-recent.png'
 ICON_CHANNELS = 'icon-sources.png'
 
 ####################################################################################################
 
 def Start():
-    Plugin.AddPrefixHandler(PLUGIN_PREFIX, MainMenu, NAME, ICON, ART)
-    Plugin.AddViewGroup("InfoList", viewMode="InfoList", mediaType="items")
-    Plugin.AddViewGroup("List", viewMode="List", mediaType="items")
-    MediaContainer.art = R(ART)
-    MediaContainer.title1 = NAME
-    DirectoryItem.thumb = R(ICON)
-    VideoItem.thumb = R(ICON)
-    
+    # Plugin.AddPrefixHandler(PLUGIN_PREFIX, MainMenu, NAME, ICON, ART)
+    # Plugin.AddViewGroup("InfoList", viewMode="InfoList", mediaType="items")
+    # Plugin.AddViewGroup("List", viewMode="List", mediaType="items")
+    # MediaContainer.art = R(ART)
+    # MediaContainer.title1 = NAME
+    # DirectoryItem.thumb = R(ICON)
+    # VideoItem.thumb = R(ICON)
+    ObjectContainer.title1 = NAME
     HTTP.CacheTime = CACHE_1HOUR
     
 
 #####################################################################################################
-    
+@handler('/video/skatevids', NAME)
 def MainMenu():
-    dir = MediaContainer(viewGroup="List")
+    oc = ObjectContainer()
 
+    Log('add recently added menu item')
+    # recently added items
+    oc.add(DirectoryObject(
+        key = Callback(VidMenu, limit=40, include_source_name_in_summary = True),
+        title = 'Recently Added',
+        thumb = R(ICON)
+    ))
+
+    # oc.Append(Function(DirectoryItem(VidMenu, title='Recently Added', thumb=R(ICON)), vids=all_vids[0:20], include_source_name_in_summary=True))
+    
+    # source menu
+
+    Log('add sources menu item')
+    oc.add(DirectoryObject(
+        key = Callback(SourceMenu),
+        title = 'Sources',
+        thumb = R(ICON)
+    ))
+
+    # oc.Append(Function(DirectoryItem(SourceMenu, title='Sources', thumb=R(ICON)), source_list = source_list))
+
+    #oc.add(PrefsItem(title='Preferences', thumb=R(PREFS_ICON)))
+
+    return oc
+
+
+#####################################################################################################
+def SourceMenu():
+    oc = ObjectContainer()
     str_sources = Resource.Load(CHANNELS_FILE)
 
     sources = JSON.ObjectFromString(str_sources, encoding='utf-8')
+    sources['mainmenu'].sort(cmp = lambda x, y: cmp(x.get('title', ''), y.get('title', '')))
+    for source in sources['mainmenu']: 
+        oc.add(DirectoryObject(
+            key = Callback(VidMenu, source=source['title']),
+            title = source['title'],
+            thumb = R(source['icon'])
+        ))
+        # oc.Append(Function(DirectoryItem(VidMenu, title=source['title'], thumb=R(source['icon'])), vids=source['vids']))
+
+    return oc
+
+
+#####################################################################################################
+
+def VidMenu(source = "", limit = 100, include_source_name_in_summary=False):
+    oc = ObjectContainer(title2=L('Videos'))
+
+    vids = LoadVideos(source_name = source, limit = limit)
+    
+    #add video items to menu
+    for vid in vids:
+        summary = vid['summary']
+        if include_source_name_in_summary:
+            summary = vid['source'].upper() + ' - ' + vid['summary']
+
+        video = VideoClipObject(
+                      title = vid['title'],
+                      summary = summary,
+                      originally_available_at = Datetime.ParseDate(vid['subtitle']),
+                      thumb=vid['thumb'],
+                      url = vid['url'])
+
+        oc.add(video)
+        # dir.add(URLService.MetadataObjectForURL(vid['url']))
+
+    return oc
+#################
+
+def LoadVideos(source_name = "", limit = 100):
+    str_sources = Resource.Load(CHANNELS_FILE)
+    sources = JSON.ObjectFromString(str_sources, encoding='utf-8')
     source_list = []
     all_vids = []
-
+    Log('loading sources')
     for source in sources["mainmenu"]:
+        if source_name != "" and source_name != source['title']:
+            continue
+
         vids = []
         
         for feed in source["feeds"]:
+            Log('loading ' + feed['url'])
             type = feed['type']
             url = feed['url']
 
@@ -73,56 +147,18 @@ def MainMenu():
         
         vids.sort(cmp = lambda x, y: cmp(y.get('subtitle',''), x.get('subtitle','')))
         
-        source['latest_vid_date'] = vids[0]['subtitle']
+        if len(vids):
+            source['latest_vid_date'] = vids[0]['subtitle']
         source['vids'] = vids
         source_list.append(source)
 
-    source_list.sort(cmp = lambda x, y: cmp(x.get('title', ''), y.get('title', '')))
     all_vids.sort(cmp = lambda x, y: cmp(y.get('subtitle',''), x.get('subtitle','')))
+    Log('done loading sources')
 
-    # recently added items
-    dir.Append(Function(DirectoryItem(VidMenu, title='Recently Added', thumb=R(ICON)), vids=all_vids[0:20], include_source_name_in_summary=True))
-    # source menu
-    dir.Append(Function(DirectoryItem(SourceMenu, title='Sources', thumb=R(ICON)), source_list = source_list))
+    if len(all_vids) < limit:
+        limit = len(all_vids)
 
-    dir.Append(PrefsItem(title='Preferences', thumb=R(PREFS_ICON)))
-
-    return dir
-
-
-#####################################################################################################
-
-def SourceMenu(sender, source_list=[]):
-    dir = MediaContainer(viewGroup='List')
-    
-    for source in source_list:
-        dir.Append(Function(DirectoryItem(VidMenu, title=source['title'], thumb=R(source['icon'])), vids=source['vids']))
-
-    return dir
-
-
-#####################################################################################################
-
-def VidMenu(sender, vids=[], include_source_name_in_summary=False):
-    dir = ObjectContainer(title2=L('Videos'))
-    
-    #add video items to menu
-    for vid in vids:
-        video = VideoClipObject(
-                      title = vid['title'],
-                      summary = vid['summary'],
-                      originally_available_at = Datetime.ParseDate(vid['subtitle']),
-                      thumb=vid['thumb'],
-                      url = vid['url'])
-
-        if include_source_name_in_summary:
-            video.summary = vid['source'].upper() + ' - ' + video.summary
-
-        dir.add(video)
-        #dir.add(URLService.MetadataObjectForURL(vid['url']))
-
-    return dir
-
+    return all_vids[0:limit]
 
 #####################################################################################################
 
